@@ -1,0 +1,6 @@
+.resize:hover {
+  transform: scale(1.01);
+  transition: transform 0.8s ease;
+  opacity: 0.7;
+  cursor: pointer;
+}

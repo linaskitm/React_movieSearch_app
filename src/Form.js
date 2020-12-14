@@ -8,65 +8,68 @@ const Form = () => {
     const [movies, setMovies] = useState([])
     const [info, setInfo] = useState({})
 
-    useEffect(  () => {
-        getMovies();
-    }, [query]);
+    useEffect(() => {
+        getMovies()
+    }, [query])
 
     useEffect(() => {
-        openMovie();
-    }, []);
+        openMovie()
+    }, [])
 
     const getMovies = async () => {
-    const response = await fetch(`https://www.omdbapi.com/?apikey=e4db3ced&s=${query}`);
-    const data = await response.json();
+    const response = await fetch(`https://www.omdbapi.com/?apikey=e4db3ced&s=${query}`)
+    const data = await response.json()
     setMovies(data.Search)
     console.log(data.Search)
-    console.log(movies) 
-  }
-  console.log('Cia idomu', movies.Title)
-
-      const urlInfo = `https://www.omdbapi.com/?apikey=e4db3ced&i=`;
+  } 
+  console.log(movies)
+  
+      const urlInfo = `https://www.omdbapi.com/?apikey=e4db3ced&i=`
       const openMovie = async (id) => {
-        const response = await fetch(urlInfo + id);
-        const data = await response.json();
-        console.log(data);
+        const response = await fetch(urlInfo + id)
+        const data = await response.json()
+        console.log(data)
         setInfo(data)
         setMovies([])
-    }
+      }
     console.log(info)
     
 
     const updateSearch = e => {
-    setSearch(e.target.value);
+    setSearch(e.target.value)
   }
     const getSearch = (e) =>{
       e.preventDefault()
       setQuery(searh)
+      // reset input 
       setSearch('')
   }
     const closeInfo = () => {
       setInfo({})
+      //back to movies list to invoke again
       getMovies()
     }
   
     return (
         <div>
-             <form onSubmit={getSearch} className="search-form">
-                <input className="search-bar" type="text" value={searh} onChange={updateSearch}/>
-                <button className="search-button" type="submit">Search</button>
+             <form  onSubmit={getSearch} className="mb-5">
+                <input className="form-control" type="text" value={searh} onChange={updateSearch}/>
+                <button className="form-control" type="submit">Search</button>
             </form>
-                  {movies.map(movie => (
+            <div className="row">
+                  { (typeof movies != null) ? movies.map(movie => (
                     <MovieList
-                     
+                    
                     key = {movie.imdbID}
                     title = {movie.Title}
                     year = {movie.Year}
                     image = {movie.Poster}
                     open = {()=> openMovie(movie.imdbID)}
                     />
-                  ))}
+                  )) : <div> Nera filmo</div>}
                   
-              {(typeof info.Title != "undefined")?<MovieInfo info = {info} closeInfo = {closeInfo}/> : false}
+              {(typeof info.Title != "undefined")? <MovieInfo key={info.imdbID} info = {info} closeInfo = {closeInfo}/> : 'belekas'} 
+              </div>
                             
         </div>
     )
